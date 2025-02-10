@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Consumo</title>
+</head>
+
+<body>
+
+    <script>
+        // Declaro a variável para armazenar a distância e inicio um loop para garantir um valor válido
+        let distancia;
+        do {
+            // Solicito ao usuário a distância da sua casa até o trabalho e com o (.replace)subistituou a virgula por ponto 
+            distancia = parseFloat(prompt("Qual a distância da sua casa até o seu trabalho em km? (Digite um número maior que 0)").replace(',', '.'));
+            // Se o valor informado for menor ou igual a 0 ou não for um número, exibo um alerta
+            if (distancia <= 0 || isNaN(distancia)) {
+                alert("Você deve digitar um número válido maior que 0.");
+            }
+        } while (distancia <= 0 || isNaN(distancia)); // Repito o loop enquanto o valor não for válido
+
+        // Declaro a variável para armazenar o consumo médio do veículo e inicio um loop de validação
+        let consumo;
+        do {
+            // Solicito o consumo médio do veículo e faço a substituição de vírgula por ponto
+            consumo = parseFloat(prompt("Qual consumo médio do seu veículo em km/L? (Digite um número maior que 0)").replace(',', '.'));
+            // Se o valor for inválido, exibo um alerta para o usuário
+            if (consumo <= 0 || isNaN(consumo)) {
+                alert("Digite um número válido maior que 0.");
+            }
+        } while (consumo <= 0 || isNaN(consumo)); // Repito até que o valor seja válido
+
+        // Calculo a quantidade de combustível necessária dividindo a distância pelo consumo do veículo
+        let consumo_necessario = distancia / consumo;
+
+        // Declaro a variável para armazenar o número de postos pesquisados e inicio a validação
+        let postos;
+        do {
+            // Peço ao usuário quantos postos ele pesquisou e converto para número inteiro
+            postos = parseInt(prompt("Em quantos postos você pesquisou? (Digite um número maior que 0)").replace(',', '.'));
+            // Caso o valor não seja válido, exibo um alerta
+            if (postos <= 0 || isNaN(postos)) {
+                alert("Digite um número válido maior que 0.");
+            }
+        } while (postos <= 0 || isNaN(postos)); // Loop até o usuário informar um número válido
+
+        // Inicializo um array para armazenar os preços e uma variável para acumular o valor total
+        let precos = [];
+        let valortotal = 0;
+
+        // Loop para coletar os preços dos combustíveis de cada posto
+        for (let i = 1; i <= postos; i++) {
+            let preco;
+            do {
+                // Solicito ao usuário o preço do combustível para cada posto, substituindo vírgula por ponto
+                preco = parseFloat(prompt(`Qual o valor do combustível no Posto ${i}? (Digite um número maior que 0)`).replace(',', '.'));
+                // Se o preço informado for inválido, exibo um alerta
+                if (preco <= 0 || isNaN(preco)) {
+                    alert("O preço deve ser um número maior que 0.");
+                }
+            } while (preco <= 0 || isNaN(preco)); // Repito até obter um valor válido
+
+            // Adiciono o preço ao array e somo ao valor total
+            precos.push(preco);
+            valortotal += preco;
+        }
+
+        // Encontro o menor preço usando Math.min aplicado ao array de preços
+        let menorValor = Math.min(...precos);
+        // Calculo a média dos preços
+        let media = valortotal / precos.length;
+
+        // Inicio a construção da mensagem que será exibida para o usuário
+        let mensagem = `<h3>Resumo do Consumo</h3>`;
+        // Exibo a distância percorrida, substituindo o ponto por vírgula para fins de exibição
+        mensagem += `<p><strong>Distância percorrida:</strong> ${distancia} km</p>`.replace('.', ',');
+        // Exibo o consumo do veículo, novamente fazendo a substituição para exibição
+        mensagem += `<p><strong>Consumo do veículo:</strong> ${consumo} km/L</p>`.replace('.', ',');
+        // Exibo o combustível necessário, formatado para 2 casas decimais e com substituição de ponto por vírgula
+        mensagem += `<p><strong>Combustível necessário:</strong> ${consumo_necessario.toFixed(2)} Litros</p>`.replace('.', ',');
+        // Título para a seção de pesquisa de preços
+        mensagem += `<h3>Pesquisa de Preços</h3>`;
+
+        // Loop para exibir o preço de cada posto pesquisado
+        for (let i = 0; i < precos.length; i++) {
+            mensagem += `<p>Posto ${i + 1}: R$ ${precos[i].toFixed(2)}</p>`.replace('.', ',');
+        }
+
+        // Se pelo menos um preço for maior que 0, exibo o menor preço e a média dos preços
+        if (precos.some(preco => preco > 0)) {
+            mensagem += `<p><strong>Menor preço:</strong> R$ ${menorValor.toFixed(2)} </p>`.replace('.', ',');
+            mensagem += `<p><strong>Média dos preços:</strong> R$ ${media.toFixed(2)}</p>`.replace('.', ',');
+        }
+
+        // Escrevo a mensagem completa na página
+        document.write(mensagem);
+
+    </script>
+
+</body>
+
+</html>
